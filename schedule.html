@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bulldogs 2026 Schedule</title>
+<link rel="stylesheet" href="starfield.css">
+</head>
+<body>
+
+<a href="index.html" class="back-link back-link--teal">Return to Starfield</a>
+
+<h1 class="page-title page-title--teal page-title--schedule">Bulldogs 2026</h1>
+<p class="page-subtitle">Scray Hill Park · De Pere, WI</p>
+
+<div id="games"></div>
+
+<script>
+  const games = [
+    { date: "4/12/2026", time: "1:00 PM", field: "2", home: "Sharks",    away: "Bulldogs" },
+    { date: "4/19/2026", time: "3:00 PM", field: "2", home: "Bulldogs",  away: "Hawks"    },
+    { date: "4/19/2026", time: "4:00 PM", field: "3", home: "Phantoms",  away: "Bulldogs" },
+    { date: "4/26/2026", time: "3:00 PM", field: "3", home: "Bulldogs",  away: "Cobras"   },
+    { date: "5/3/2026",  time: "2:00 PM", field: "3", home: "Cobras",    away: "Bulldogs" },
+    { date: "5/17/2026", time: "2:00 PM", field: "4", home: "Predators", away: "Bulldogs" },
+    { date: "5/17/2026", time: "3:00 PM", field: "1", home: "Bulldogs",  away: "Sharks"   },
+    { date: "5/31/2026", time: "1:00 PM", field: "6", home: "Hawks",     away: "Bulldogs" },
+  ];
+
+  const DAYS   = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  function formatDate(dateStr) {
+    const [m, d, y] = dateStr.split("/").map(Number);
+    const dt = new Date(y, m - 1, d);
+    return DAYS[dt.getDay()] + " " + MONTHS[dt.getMonth()] + " " + d + ", " + y;
+  }
+
+  const now = new Date();
+  let nextGameIdx = -1;
+  for (let i = 0; i < games.length; i++) {
+    const [m, d, y] = games[i].date.split("/").map(Number);
+    if (new Date(y, m - 1, d) >= new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
+      nextGameIdx = i; break;
+    }
+  }
+
+  const container = document.getElementById("games");
+  games.forEach((g, i) => {
+    const card = document.createElement("div");
+    card.className = "game-card";
+    const homeHL = g.home === "Bulldogs" ? '<span class="bulldogs">' + g.home + '</span>' : g.home;
+    const awayHL = g.away === "Bulldogs" ? '<span class="bulldogs">' + g.away + '</span>' : g.away;
+    const badge = (i === nextGameIdx) ? '<span class="next-game-badge">Next Game</span>' : '';
+    card.innerHTML =
+      '<div class="row game-title">Game ' + (i+1) + badge + '</div>' +
+      '<div class="row date-row">' + formatDate(g.date) + '</div>' +
+      '<div class="row field-row">Scray Hill \u2014 Field ' + g.field + '</div>' +
+      '<div class="row time-row">' + g.time + '</div>' +
+      '<div class="row matchup">' + homeHL + ' v. ' + awayHL + ' <span style="color:rgba(255,255,255,0.3);font-weight:300;font-size:0.75rem;letter-spacing:1px;">(Home v. Away)</span></div>' +
+      '<div class="row map-row"><img src="gamedaymap.png" alt="Scray Hill Park Map" /></div>';
+    container.appendChild(card);
+  });
+</script>
+</body>
+</html>
